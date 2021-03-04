@@ -25,8 +25,6 @@ Bible::Bible(const string s) {
 // REQUIRED: lookup finds a given verse in this Bible
 const Verse Bible::lookup(Ref ref, LookupResult& status) { 
     // TODO: scan the file to retrieve the line with ref ...
-	instream.open(infile,ios::in);
-	
 	map<Ref, int>::iterator iter;
 	iter = refs.find(ref);
 	Verse blank;
@@ -40,17 +38,38 @@ const Verse Bible::lookup(Ref ref, LookupResult& status) {
 	string line;
 	
 	if (iter == refs.end()) {
-		return(blank);
+		//status = OTHER;
+		//return blank;
+	
+		int newB = ref.getBook();
+		int newC = ref.getChap();
+		Ref verseCheckRef (newB,newC,1);
+		
+		lookup(verseCheckRef,status);
+		
+		if (status == SUCCESS){
+			cout << "Status: No Verse" << endl << endl ;
+			status = NO_VERSE;
+			return blank;
+		}
+		else {
+			cout<< "Status: No Chapter" << endl << endl;
+			status = NO_CHAPTER;
+			return blank;
+		}
+		
+		
 	} 
 	else {
+		instream.open(infile,ios::in);
 		positionInFile = refs[ref];
 		instream.seekg(positionInFile);
 		getline(instream,line);
 		Verse foundVerse(line);
+		instream.close();
+		status = SUCCESS;
 		return foundVerse;
 	}
-	
-	instream.close();
     /*
 		
 	int requestedBook = ref.getBook();
@@ -124,8 +143,8 @@ const Verse Bible::lookup(Ref ref, LookupResult& status) {
 
 // REQUIRED: Return the reference after the given ref
 const Ref next(const Ref ref, LookupResult& status) {
-	//use lookup function, and based on that status, adjust.
-	/*string buffer;
+	/*use lookup function, and based on that status, adjust.
+	string buffer;
 	getline(instream, buffer);
 	
 	if(status == NO_VERSE){
@@ -156,7 +175,7 @@ const string Bible::error(LookupResult status) {
 };
 
 void Bible::display() {
-	cout << "Bible file: " << infile << endl;
+	cout << endl << "Bible file: " << infile << endl << endl;
 }
 
 int Bible::buildTextIndex (string filename) {
@@ -185,7 +204,8 @@ int Bible::buildTextIndex (string filename) {
 	Ref newRef(line); //Cretaed a new Ref object for the line before we analize it.
 	refs[newRef] = position;
   } // end while loop for lines of file
-  cout << "Refs: " << refs.size() << " Offset: " << position << endl;
+  cout << endl << endl << "Refs: " << refs.size() << " Offset: " << position << endl;
+  instream.close();
   return 1;  /* true, indicates success */
 }
 

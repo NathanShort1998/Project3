@@ -51,7 +51,6 @@ main (int argc, char **argv) {
 	if (b < 1 || b > 66){
 		cout << "This book does not exist." << endl;
 	}
-	
 	for(int x = 0; x < r; x++){
 		Ref ref(b, c, v);
 		
