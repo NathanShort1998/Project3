@@ -18,7 +18,7 @@
  */
 
 #ifdef logging
-const string logFilename =  LOG_FILENAME;
+const string logFilename = "/tmp/natshort-LogFile.log";
 ofstream logFile;
 string timestamp() {
   time_t _tm = time( NULL );

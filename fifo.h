@@ -27,11 +27,11 @@
 
 using namespace std;
 
-#define MaxMess 200
+#define MaxMess 1000
 const string PATH  = "/tmp/";
 // SIGniture assures the pipe is unique amoung users
 const string SIG = "natshort_";
-#define MODE 0777
+#define MODE 0777  //Allow pipe to be read and written by any user
 #define MESSTERM '\n'
 
 class Fifo {
